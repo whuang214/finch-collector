@@ -1,0 +1,34 @@
+{% extends 'base.html' %} {% block content %}
+
+<style>
+  .card-img-top {
+    max-height: 200px;
+    object-fit: cover;
+  }
+</style>
+
+<section class="container mt-4">
+  <h1 class="mb-4">All Finches</h1>
+  <div class="row">
+    {% for finch in finches %}
+    <div class="col-lg-4 mb-4">
+      <div class="card">
+        <img
+          src="{{ finch.image_url }}"
+          class="card-img-top"
+          alt="{{ finch.name }}"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ finch.name }}</h5>
+          <p class="card-text">{{ finch.description }}</p>
+          <a href="{% url 'finch_detail' finch.id %}" class="btn btn-primary"
+            >Learn More</a
+          >
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}
