@@ -55,7 +55,7 @@ class FinchUpdate(UpdateView):  # inherits from UpdateView
 # POST request to delete the finch
 class FinchDelete(DeleteView):  # inherits from DeleteView
     model = Finch
-    success_url = "/finches/"
+    success_url = "/finches"
 
 
 def add_feeding(request, finch_id):
