@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Finch
+from .forms import FeedingForm
 
 
 def home(request):
@@ -18,8 +19,14 @@ def finch_index(request):
 
 
 def finch_detail(request, finch_id):
+    # get the data from the database
     fitch = Finch.objects.get(id=finch_id)
-    return render(request, "finches/detail.html", {"finch": fitch})
+    # make a feeding form
+    feeding_form = FeedingForm()
+
+    return render(
+        request, "finches/detail.html", {"finch": fitch, "feeding_form": feeding_form}
+    )
 
 
 # GET request to display the create form
