@@ -1,10 +1,8 @@
-{% extends 'base.html' %} {% block content %} {% comment %} This file must send
-a post request back action="" {% endcomment %}
-
+{% extends 'base.html' %} {% block content %}
 <form action="" method="POST">
   {% csrf_token %}
-  <input type="submit" value="Yes - Delete!" class="btn" />
-  <a href="{% url 'finch_detail' finch.id %}">Cancel</a>
+  <p>Are you sure you want to delete <strong>{{ finch.name }}</strong>?</p>
+  <button type="submit" class="btn btn-link">Confirm</button>
+  <a href="{% url 'finch_detail' finch.id %}" class="btn btn-link">Cancel</a>
 </form>
-
 {% endblock %}

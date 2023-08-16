@@ -34,25 +34,46 @@ def finch_detail(request, finch_id):
 # while passing in a form object into the template
 
 
+from django.views.generic.edit import CreateView, UpdateView
+from .models import Finch
+
+
+# GET request to display the create form
 # POST request to process the create form
-class FinchCreate(CreateView):  # inherits from CreateView
-    model = Finch  # model is the model we are using
-    fields = "__all__"  # all fields in the model
-    success_url = "/finches/"  # where to go after creating a new finch
+class FinchCreate(CreateView):
+    model = Finch
+    fields = "__all__"
+    success_url = "/finches/"
+
+    # override the get_form method to add bootstrap classes to the form fields
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["name"].widget.attrs["class"] = "form-control"
+        form.fields["description"].widget.attrs["class"] = "form-control"
+        form.fields["image_url"].widget.attrs["class"] = "form-control"
+        return form
 
 
 # GET request to display the update form
 # Passes in the finch object into the template
 # the finch object has all the fields we need to display in the form
-
-
 # POST request to process the update form
-class FinchUpdate(UpdateView):  # inherits from UpdateView
+class FinchUpdate(UpdateView):
     model = Finch
     fields = [
         "description",
         "image_url",
     ]
+
+    # override the get_form method to add bootstrap classes to the form fields
+    def get_form(self, form_class=None):
+        # get the form from the parent class
+        form = super().get_form(form_class)
+        # add bootstrap classes to the form fields
+        form.fields["description"].widget.attrs["class"] = "form-control"
+        form.fields["image_url"].widget.attrs["class"] = "form-control"
+        # normally will just return the form but we want to add a custom label
+        return form
 
 
 # GET request to display the confirmation page
