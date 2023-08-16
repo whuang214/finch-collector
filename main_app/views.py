@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Finch
 from .forms import FeedingForm
@@ -63,4 +63,14 @@ class FinchDelete(DeleteView):  # inherits from DeleteView
 
 
 def add_feeding(request, finch_id):
-    pass
+    # add a feeding to the database
+    form = FeedingForm(request.POST)
+    if form.is_valid():
+        # don't save the form to the db until it has the finch_id assigned
+        # b/c right now it is just a form with a date and mealtime no finch_id
+        new_feeding = form.save(commit=False)
+        # assign the finch to the feeding
+        new_feeding.finch_id = finch_id
+        new_feeding.save()
+
+    return redirect("finch_detail", finch_id=finch_id)
