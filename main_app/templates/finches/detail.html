@@ -15,6 +15,14 @@
       <a href="{% url 'finches' %}" class="btn btn-primary"
         >Back to Finch List</a
       >
+      <a
+        href="{% url 'finches_update' finch.id %}"
+        class="btn btn-secondary mr-2"
+        >Edit</a
+      >
+      <a href="{% url 'finches_delete' finch.id %}" class="btn btn-danger"
+        >Delete</a
+      >
     </div>
   </div>
 </div>
