@@ -43,11 +43,8 @@ class FinchCreate(CreateView):  # inherits from CreateView
 class FinchUpdate(UpdateView):  # inherits from UpdateView
     model = Finch
     fields = [
-        "scientific_name",
         "description",
         "image_url",
-        "average_lifespan",
-        "native_region",
     ]
 
 
