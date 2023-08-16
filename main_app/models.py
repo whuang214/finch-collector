@@ -1,6 +1,12 @@
 from django.db import models
 from django.urls import reverse
 
+MEALS = (
+    ("B", "Breakfast"),
+    ("L", "Lunch"),
+    ("D", "Dinner"),
+)
+
 
 class Finch(models.Model):
     name = models.CharField(max_length=100)
@@ -15,3 +21,25 @@ class Finch(models.Model):
     def get_absolute_url(self):
         # finch_detail is the "name" of the route
         return reverse("finch_detail", kwargs={"finch_id": self.id})
+        # this returns a URL of the detail page (first argument) with the id of the finch (second argument)
+
+
+class Feeding(models.Model):
+    date = models.DateField()
+    # make a meal a choice of breakfast, lunch, or dinner (should be B, L, or D)
+    meal = models.CharField(max_length=1, choices=MEALS, default=MEALS[0][0])
+    # on delete means if the finch is deleted, delete the feeding with id of finch_id
+    finch = models.ForeignKey(Finch, on_delete=models.CASCADE)
+
+    # define dunder str to return a string representation of the model
+    def __str__(self):
+        return f"{self.get_meal_display()} on {self.date}"
+        # get_meal_display works by taking the first letter of the meal and returning the second value in the tuple (how django processes tuple choices)
+
+    # meta data for the model
+    class Meta:
+        # you can order by date in descending order
+        ordering = ["-date"]
+        # you can change the plural name of the model
+        # verbose_name_plural = "feedings"
+        # look up the docs for more meta options
