@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from datetime import date
 
 MEALS = (
     ("B", "Breakfast"),
@@ -22,6 +23,10 @@ class Finch(models.Model):
         # finch_detail is the "name" of the route
         return reverse("finch_detail", kwargs={"finch_id": self.id})
         # this returns a URL of the detail page (first argument) with the id of the finch (second argument)
+
+    # this is a custom method that returns true if the finch has been fed today (all 3 meals)
+    def fed_for_today(self):
+        return self.feeding_set.filter(date=date.today()).count() >= len(MEALS)
 
     class Meta:
         # change the plural name of the model to finches instead of finchs
