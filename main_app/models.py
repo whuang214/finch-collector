@@ -23,6 +23,10 @@ class Finch(models.Model):
         return reverse("finch_detail", kwargs={"finch_id": self.id})
         # this returns a URL of the detail page (first argument) with the id of the finch (second argument)
 
+    class Meta:
+        # change the plural name of the model to finches instead of finchs
+        verbose_name_plural = "finches"
+
 
 class Feeding(models.Model):
     date = models.DateField()
