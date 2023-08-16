@@ -2,10 +2,24 @@
 <div class="container mt-5">
   <div class="row">
     <div class="col-md-8 offset-md-2">
-      <h1 class="display-4 text-center mb-4">Home</h1>
+      <h1 class="display-4 text-center mb-4">Welcome to Finch Collector!</h1>
       <p class="lead text-center">
-        Welcome to Finch Collector! Your place to collect and explore finch
-        information.
+        Step into the world of finches, where every chirp tells a story and
+        every feather holds a secret. Finch Collector is your online haven for
+        all things finch-related, where you can embark on a journey of
+        discovery, care, and joy.
+      </p>
+      <div class="text-center">
+        <a href="{% url 'finches' %}" class="btn btn-primary btn-lg mx-2"
+          >All Finches</a
+        >
+        <a href="{% url 'finches_create' %}" class="btn btn-success btn-lg mx-2"
+          >Add a Finch</a
+        >
+      </div>
+      <p class="mt-4 text-center">
+        Join our vibrant community of finch enthusiasts and unlock the world of
+        these feathered wonders. Begin your journey with Finch Collector today!
       </p>
     </div>
   </div>
