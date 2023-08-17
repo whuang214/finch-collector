@@ -1,13 +1,19 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView
 from django.views.generic.edit import (
     CreateView,
     UpdateView,
     DeleteView,
 )
-from django.views.generic import ListView, DetailView
+
 from .models import Finch, Food
 from .forms import FeedingForm
+
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def home(request):
@@ -18,12 +24,16 @@ def about(request):
     return render(request, "about.html")
 
 
+@login_required
 def finch_index(request):
     # get the data from the database
-    fitches = Finch.objects.all()
+    fitches = Finch.objects.filter(user=request.user)
+    # could also do this since request.user is the logged in user
+    # fitches = request.user.finch_set.all()
     return render(request, "finches/index.html", {"finches": fitches})
 
 
+@login_required
 def finch_detail(request, finch_id):
     # get the data from the database
     finch = Finch.objects.get(id=finch_id)
@@ -50,7 +60,7 @@ def finch_detail(request, finch_id):
 # GET request to display the create form
 # Should return a html page <appname>/<model_name>_form.html by default
 # while passing in a form object into the template
-class FinchCreate(CreateView):
+class FinchCreate(LoginRequiredMixin, CreateView):
     model = Finch
     fields = "__all__"
     success_url = "/finches/"
@@ -68,7 +78,7 @@ class FinchCreate(CreateView):
 # Passes in the finch object into the template
 # the finch object has all the fields we need to display in the form
 # POST request to process the update form
-class FinchUpdate(UpdateView):
+class FinchUpdate(LoginRequiredMixin, UpdateView):
     model = Finch
     fields = [
         "description",
@@ -88,11 +98,12 @@ class FinchUpdate(UpdateView):
 
 # GET request to display the confirmation page
 # POST request to delete the finch
-class FinchDelete(DeleteView):  # inherits from DeleteView
+class FinchDelete(LoginRequiredMixin, DeleteView):  # inherits from DeleteView
     model = Finch
     success_url = reverse_lazy("finches")
 
 
+@login_required
 # POST request to add a feeding to a finch
 def add_feeding(request, finch_id):
     # add a feeding to the database
@@ -111,23 +122,31 @@ def add_feeding(request, finch_id):
 # automatically handle get and post requests
 # GET will display the form
 # POST will process the form
-class FoodList(ListView):
+class FoodList(LoginRequiredMixin, ListView):
     model = Food
     template_name = "foods/index.html"
 
 
 # get will display the form
-class FoodDetail(DetailView):
+class FoodDetail(LoginRequiredMixin, DetailView):
     model = Food
     template_name = "foods/detail.html"
 
 
 # get will display the form
 # post will process the form
-class FoodCreate(CreateView):
+class FoodCreate(LoginRequiredMixin, CreateView):
     model = Food
     fields = "__all__"
     success_url = reverse_lazy("foods")
+
+    def form_valid(self, form):
+        # Assign the logged in user (self.request.user)
+        form.instance.user = (
+            self.request.user
+        )  # form.instance is the finch that is being made
+        # Let the CreateView do its job as usual
+        return super().form_valid(form)
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
@@ -136,7 +155,7 @@ class FoodCreate(CreateView):
         return form
 
 
-class FoodUpdate(UpdateView):
+class FoodUpdate(LoginRequiredMixin, UpdateView):
     model = Food
     fields = ["name"]
 
@@ -147,16 +166,38 @@ class FoodUpdate(UpdateView):
         return form
 
 
-class FoodDelete(DeleteView):
+class FoodDelete(LoginRequiredMixin, DeleteView):
     model = Food
     success_url = reverse_lazy("foods")
 
 
+@login_required
 def assoc_food(request, finch_id, food_id):
     Finch.objects.get(id=finch_id).favorite_foods.add(food_id)
     return redirect("finch_detail", finch_id=finch_id)
 
 
+@login_required
 def unassoc_food(request, finch_id, food_id):
     Finch.objects.get(id=finch_id).favorite_foods.remove(food_id)
     return redirect("finch_detail", finch_id=finch_id)
+
+
+def signup(request):
+    error_message = ""
+    if request.method == "POST":
+        # This is how to create a 'user' form object
+        # that includes the data from the browser
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            # This will add the user to the database
+            user = form.save()
+            # This is how we log a user in via code
+            login(request, user)
+            return redirect("home")
+        else:
+            error_message = "Invalid sign up - try again"
+    # A bad POST or a GET request, so render signup.html with an empty form
+    form = UserCreationForm()
+    context = {"form": form, "error_message": error_message}
+    return render(request, "registration/signup.html", context)
