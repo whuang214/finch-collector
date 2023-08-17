@@ -105,7 +105,7 @@
       {% for food in finch.favorite_foods.all %}
       <div class="card mb-3">
         <div class="card-body">
-          <h6 class="card-title">{{ finch.name }} enjoys {{ food.name }}</h6>
+          <p class="card-title">{{ food.name }}</p>
         </div>
         <div class="card-footer">
           <form
