@@ -32,6 +32,7 @@ class Finch(models.Model):
     description = models.TextField()
     image_url = models.URLField()
     favorite_foods = models.ManyToManyField(Food)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     # This is the string representation of the model
     # if someone did print(finch) it would return the name
