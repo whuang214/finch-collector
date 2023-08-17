@@ -1,0 +1,8 @@
+{% extends 'base.html' %} {% block content %}
+<form action="" method="POST">
+  {% csrf_token %}
+  <p>Are you sure you want to delete <strong>{{ food.name }}</strong>?</p>
+  <button type="submit" class="btn btn-link">Confirm</button>
+  <a href="{% url 'foods_detail' food.id %}" class="btn btn-link">Cancel</a>
+</form>
+{% endblock %}

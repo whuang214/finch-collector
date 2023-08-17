@@ -100,11 +100,13 @@ def add_feeding(request, finch_id):
 # POST will process the form
 class FoodList(ListView):
     model = Food
+    template_name = "foods/index.html"
 
 
 # get will display the form
 class FoodDetail(DetailView):
     model = Food
+    template_name = "foods/detail.html"
 
 
 # get will display the form

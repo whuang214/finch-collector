@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% block content %}
+
+<style>
+  .card-img-top {
+    max-height: 200px;
+    object-fit: cover;
+  }
+</style>
+
+<section class="container mt-4">
+  <h1 class="mb-4">All Foods</h1>
+  <div class="row">
+    {% for food in foods %}
+    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+      <div class="card">
+        <img
+          src="{{ food.image_url }}"
+          class="card-img-top"
+          alt="{{ food.name }}"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ food.name }}</h5>
+          <a href="{% url 'foods_detail' food.id %}" class="btn btn-primary"
+            >Details</a
+          >
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <h4 class="text-center">No Foods</h4>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}
