@@ -19,37 +19,37 @@ urlpatterns = [
         "finches/<int:pk>/delete/", views.FinchDelete.as_view(), name="finches_delete"
     ),
     path("finches/<int:finch_id>/add_feeding/", views.add_feeding, name="add_feeding"),
-    # favorite foods routes
-    path("favorite_foods/", views.FavoriteFoodList.as_view(), name="favorite_foods"),
+    # foods routes
+    path("foods/", views.FoodList.as_view(), name="foods"),
     path(
-        "favorite_foods/<int:pk>/",
-        views.FavoriteFoodDetail.as_view(),
-        name="favorite_foods_detail",
+        "foods/<int:pk>/",
+        views.FoodDetail.as_view(),
+        name="foods_detail",
     ),
     path(
-        "favorite_foods/create/",
-        views.FavoriteFoodCreate.as_view(),
-        name="favorite_foods_create",
+        "foods/create/",
+        views.FoodCreate.as_view(),
+        name="foods_create",
     ),
     path(
-        "favorite_foods/<int:pk>/update/",
-        views.FavoriteFoodUpdate.as_view(),
-        name="favorite_foods_update",
+        "foods/<int:pk>/update/",
+        views.FoodUpdate.as_view(),
+        name="foods_update",
     ),
     path(
-        "favorite_foods/<int:pk>/delete/",
-        views.FavoriteFoodDelete.as_view(),
-        name="favorite_foods_delete",
+        "foods/<int:pk>/delete/",
+        views.FoodDelete.as_view(),
+        name="foods_delete",
     ),
     # associate a favorite food with a finch (M:M)
     path(
-        "finches/<int:finch_id>/assoc_favorite_food/<int:favorite_food_id>/",
-        views.assoc_favorite_food,
-        name="assoc_favorite_food",
+        "finches/<int:finch_id>/assoc_foods/<int:foods_id>/",
+        views.assoc_food,
+        name="assoc_food",
     ),
     path(
-        "finches/<int:finch_id>/unassoc_favorite_food/<int:favorite_food_id>/",
-        views.unassoc_favorite_food,
-        name="unassoc_favorite_food",
+        "finches/<int:finch_id>/unassoc_foods/<int:foods_id>/",
+        views.unassoc_food,
+        name="unassoc_food",
     ),
 ]

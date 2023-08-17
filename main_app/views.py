@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Finch
+from django.views.generic.edit import (
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
+from django.views.generic import ListView, DetailView
+from .models import Finch, Food
 from .forms import FeedingForm
 
 
@@ -32,14 +37,6 @@ def finch_detail(request, finch_id):
 # GET request to display the create form
 # Should return a html page <appname>/<model_name>_form.html by default
 # while passing in a form object into the template
-
-
-from django.views.generic.edit import CreateView, UpdateView
-from .models import Finch
-
-
-# GET request to display the create form
-# POST request to process the create form
 class FinchCreate(CreateView):
     model = Finch
     fields = "__all__"
@@ -83,6 +80,7 @@ class FinchDelete(DeleteView):  # inherits from DeleteView
     success_url = "/finches"
 
 
+# POST request to add a feeding to a finch
 def add_feeding(request, finch_id):
     # add a feeding to the database
     form = FeedingForm(request.POST)
@@ -95,3 +93,40 @@ def add_feeding(request, finch_id):
         new_feeding.save()
 
     return redirect("finch_detail", finch_id=finch_id)
+
+
+# automatically handle get and post requests
+# GET will display the form
+# POST will process the form
+class FoodList(ListView):
+    model = Food
+
+
+# get will display the form
+class FoodDetail(DetailView):
+    model = Food
+
+
+# get will display the form
+# post will process the form
+class FoodCreate(CreateView):
+    model = Food
+    fields = "__all__"
+
+
+class FoodUpdate(UpdateView):
+    model = Food
+    fields = ["name"]
+
+
+class FoodDelete(DeleteView):
+    model = Food
+    success_url = "/foods"
+
+
+def assoc_food(request, finch_id, food_id):
+    pass
+
+
+def unassoc_food(request, finch_id, food_id):
+    pass
