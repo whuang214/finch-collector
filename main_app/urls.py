@@ -24,22 +24,22 @@ urlpatterns = [
     path(
         "foods/<int:pk>/",
         views.FoodDetail.as_view(),
-        name="foods_detail",
+        name="food_detail",
     ),
     path(
         "foods/create/",
         views.FoodCreate.as_view(),
-        name="foods_create",
+        name="food_create",
     ),
     path(
         "foods/<int:pk>/update/",
         views.FoodUpdate.as_view(),
-        name="foods_update",
+        name="food_update",
     ),
     path(
         "foods/<int:pk>/delete/",
         views.FoodDelete.as_view(),
-        name="foods_delete",
+        name="food_delete",
     ),
     # associate a favorite food with a finch (M:M)
     path(

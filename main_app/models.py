@@ -16,7 +16,7 @@ class Food(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("favorite_foods_detail", kwargs={"pk": self.id})
+        return reverse("food_detail", kwargs={"pk": self.id})
 
 
 class Finch(models.Model):

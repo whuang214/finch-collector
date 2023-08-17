@@ -3,6 +3,6 @@
   {% csrf_token %}
   <p>Are you sure you want to delete <strong>{{ food.name }}</strong>?</p>
   <button type="submit" class="btn btn-link">Confirm</button>
-  <a href="{% url 'foods_detail' food.id %}" class="btn btn-link">Cancel</a>
+  <a href="{% url 'food_detail' food.id %}" class="btn btn-link">Cancel</a>
 </form>
 {% endblock %}

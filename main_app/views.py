@@ -114,6 +114,7 @@ class FoodDetail(DetailView):
 class FoodCreate(CreateView):
     model = Food
     fields = "__all__"
+    success_url = "/foods"
 
 
 class FoodUpdate(UpdateView):
