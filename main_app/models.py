@@ -2,19 +2,13 @@ from django.db import models
 from django.urls import reverse
 from datetime import date
 
+from django.contrib.auth.models import User
+
 MEALS = (
     ("B", "Breakfast"),
     ("L", "Lunch"),
     ("D", "Dinner"),
 )
-
-
-class User(models.Model):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    username = models.CharField(max_length=100)
-    email = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
 
 
 class Food(models.Model):
