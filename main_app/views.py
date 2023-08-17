@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views.generic.edit import (
     CreateView,
     UpdateView,
@@ -25,12 +26,24 @@ def finch_index(request):
 
 def finch_detail(request, finch_id):
     # get the data from the database
-    fitch = Finch.objects.get(id=finch_id)
+    finch = Finch.objects.get(id=finch_id)
     # make a feeding form
     feeding_form = FeedingForm()
 
+    # get all foods from the database that are not in the finch's favorite foods
+    # pass them in to the template
+    foods_finch_doesnt_have_in_favorites = Food.objects.exclude(
+        id__in=finch.favorite_foods.all().values_list("id")
+    )
+
     return render(
-        request, "finches/detail.html", {"finch": fitch, "feeding_form": feeding_form}
+        request,
+        "finches/detail.html",
+        {
+            "finch": finch,
+            "feeding_form": feeding_form,
+            "foods": foods_finch_doesnt_have_in_favorites,
+        },
     )
 
 
@@ -77,7 +90,7 @@ class FinchUpdate(UpdateView):
 # POST request to delete the finch
 class FinchDelete(DeleteView):  # inherits from DeleteView
     model = Finch
-    success_url = "/finches"
+    success_url = reverse_lazy("finches")
 
 
 # POST request to add a feeding to a finch
@@ -114,22 +127,36 @@ class FoodDetail(DetailView):
 class FoodCreate(CreateView):
     model = Food
     fields = "__all__"
-    success_url = "/foods"
+    success_url = reverse_lazy("foods")
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        for field_name, field in form.fields.items():
+            field.widget.attrs["class"] = "form-control"
+        return form
 
 
 class FoodUpdate(UpdateView):
     model = Food
     fields = ["name"]
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        for field_name, field in form.fields.items():
+            field.widget.attrs["class"] = "form-control"
+        return form
+
 
 class FoodDelete(DeleteView):
     model = Food
-    success_url = "/foods"
+    success_url = reverse_lazy("foods")
 
 
 def assoc_food(request, finch_id, food_id):
-    pass
+    Finch.objects.get(id=finch_id).favorite_foods.add(food_id)
+    return redirect("finch_detail", finch_id=finch_id)
 
 
 def unassoc_food(request, finch_id, food_id):
-    pass
+    Finch.objects.get(id=finch_id).favorite_foods.remove(food_id)
+    return redirect("finch_detail", finch_id=finch_id)

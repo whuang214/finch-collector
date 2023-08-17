@@ -23,6 +23,7 @@ class Finch(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     image_url = models.URLField()
+    favorite_foods = models.ManyToManyField(Food)
 
     # This is the string representation of the model
     # if someone did print(finch) it would return the name

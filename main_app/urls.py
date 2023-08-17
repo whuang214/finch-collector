@@ -43,12 +43,12 @@ urlpatterns = [
     ),
     # associate a favorite food with a finch (M:M)
     path(
-        "finches/<int:finch_id>/assoc_foods/<int:foods_id>/",
+        "finches/<int:finch_id>/assoc_foods/<int:food_id>/",
         views.assoc_food,
         name="assoc_food",
     ),
     path(
-        "finches/<int:finch_id>/unassoc_foods/<int:foods_id>/",
+        "finches/<int:finch_id>/unassoc_foods/<int:food_id>/",
         views.unassoc_food,
         name="unassoc_food",
     ),
