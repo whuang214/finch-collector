@@ -8,6 +8,8 @@ class FeedingForm(ModelForm):
         model = Feeding
         fields = ["date", "meal"]
         widgets = {
-            "date": DateInput(attrs={"class": "form-control datepicker"}),
+            "date": DateInput(
+                attrs={"class": "form-control datepicker", "id": "datepicker"}
+            ),
             "meal": forms.Select(attrs={"class": "form-control"}),
         }
