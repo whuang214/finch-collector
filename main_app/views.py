@@ -209,3 +209,4 @@ class LoginView(LoginView):
         context = super().get_context_data(**kwargs)
         context["title"] = "Log In"
         return context
+

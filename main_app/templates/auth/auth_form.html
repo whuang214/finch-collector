@@ -1,7 +1,18 @@
 {% extends 'base.html' %} {% load custom_filters %} {% block content %}
 <div class="container mt-3">
   <h3>{{ title }}</h3>
-  <p style="color: red"><strong>{{ error_message }}</strong></p>
+  {% if form.errors %}
+  <!-- prettier-ignore -->
+  <div class="alert alert-danger">
+    <ul>
+      {% for field_errors in form.errors.values %} 
+      {% for error in field_errors %}
+      <li>{{ error }}</li>
+      {% endfor %} {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  <!-- prettier-ignore-end -->
   <form method="POST" action="">
     {% csrf_token %} {% for field in form %}
     <div class="mb-3">
