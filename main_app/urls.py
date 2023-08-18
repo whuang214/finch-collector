@@ -52,5 +52,6 @@ urlpatterns = [
         views.unassoc_food,
         name="unassoc_food",
     ),
-    path("accounts/signup/", views.signup, name="signup"),
+    path("accounts/signup/", views.SignUpView.as_view(), name="signup"),
+    path("accounts/login/", views.LoginView.as_view(), name="login"),
 ]

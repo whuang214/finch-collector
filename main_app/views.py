@@ -10,7 +10,9 @@ from django.views.generic.edit import (
 from .models import Finch, Food
 from .forms import FeedingForm
 
+# auth imports
 from django.contrib.auth import login
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -62,7 +64,7 @@ def finch_detail(request, finch_id):
 # while passing in a form object into the template
 class FinchCreate(LoginRequiredMixin, CreateView):
     model = Finch
-    fields = "__all__"
+    fields = ["name", "description", "image_url"]
     success_url = "/finches/"
 
     # override the get_form method to add bootstrap classes to the form fields
@@ -183,21 +185,27 @@ def unassoc_food(request, finch_id, food_id):
     return redirect("finch_detail", finch_id=finch_id)
 
 
-def signup(request):
-    error_message = ""
-    if request.method == "POST":
-        # This is how to create a 'user' form object
-        # that includes the data from the browser
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            # This will add the user to the database
-            user = form.save()
-            # This is how we log a user in via code
-            login(request, user)
-            return redirect("home")
-        else:
-            error_message = "Invalid sign up - try again"
-    # A bad POST or a GET request, so render signup.html with an empty form
-    form = UserCreationForm()
-    context = {"form": form, "error_message": error_message}
-    return render(request, "registration/signup.html", context)
+class SignUpView(CreateView):
+    template_name = "auth/auth_form.html"
+    form_class = UserCreationForm
+    success_url = reverse_lazy("home")
+
+    # add a title to the context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Sign Up"
+        return context
+
+
+# automatically passes in fields from the form
+# fields: username, password
+class LoginView(LoginView):
+    template_name = "auth/auth_form.html"
+    # dont need to specify the form_class b/c it is already specified in the super class
+    success_url = reverse_lazy("home")
+
+    # add a title to the context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Log In"
+        return context
